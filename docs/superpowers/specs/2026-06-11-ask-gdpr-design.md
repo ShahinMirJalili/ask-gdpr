@@ -21,7 +21,7 @@ A RAG (Retrieval-Augmented Generation) web app that answers questions about the 
 | Build mode | Grows with learning level | v1 fully explainable in interviews; evolution documented in README is itself a hiring signal |
 | Corpus | GDPR legal text, all 99 articles | Public domain, cleanly structured (perfect chunks), no privacy issues in a public repo, instantly understandable use case |
 | Retrieval v1 | Keyword scoring (lowercase word overlap, loop over list) | Matches week-1 Python level; measurable baseline for the v2 embeddings comparison |
-| LLM | Claude Haiku 4.5 (`claude-haiku-4-5-20251001`) | Cheap, fast, sufficient for context-grounded answering; cost cap via `max_tokens` |
+| LLM | Claude Haiku 4.5 (alias `claude-haiku-4-5`) | Cheap, fast, sufficient for context-grounded answering; cost cap via `max_tokens` |
 | Evals | From day 1: retrieval hit-rate (expected article in top-3) | Eval literacy = hiring signal #1; this eval is simple enough to fully understand and defend |
 | Guardrail | System prompt: answer ONLY from provided articles, cite numbers, else say "not covered by the GDPR" | Anti-hallucination; demonstrable guardrail thinking |
 | Repo language | English README + code comments (simple, clear English) | Portfolio standard. App UI itself is German (German users, German law) |
@@ -58,6 +58,7 @@ ask-gdpr/
 - `Article` class: `__init__(number, title, text, chapter)`, attributes, a `score(question_words)` method that counts keyword overlap (lowercased word set intersection). Mirrors the `Product` class pattern from Shahin's OOP course.
 - `load_articles(path)` → list of `Article` (mirrors the `Store` list pattern).
 - `search(question, articles, top_k=3)` → top-k articles by score; for-loop + sort. Stop-word list (German) to avoid scoring on "der/die/das".
+- Known v1 limitation (deliberate baseline): German inflection hurts keyword overlap ("Löschung" vs. "löschen"). Optional stretch task: simple suffix-stripping. The eval exists precisely to measure this weakness — it motivates v2 embeddings.
 
 **`claude_client.py`**
 - `ask_claude(question, articles)` → builds a prompt: system rules (German answer, cite article numbers, refuse if not in context), user question + the top-3 article texts. Calls Messages API, `max_tokens` capped (~1024). Returns answer text.
@@ -83,7 +84,7 @@ question (German)
 
 ### Dataset
 
-`scripts/build_dataset.py` fetches the German GDPR text (public domain, e.g. from gesetze-im-internet.de / EUR-Lex) once and parses it into `gdpr_articles.json`. The JSON is committed so the app works without network/scraping at runtime.
+`scripts/build_dataset.py` fetches the official German GDPR text from **EUR-Lex (CELEX 32016R0679)** — or dsgvo-gesetz.de as a cleaner-to-parse mirror — once and parses it into `gdpr_articles.json`. (Note: gesetze-im-internet.de hosts the BDSG, not the GDPR.) The JSON is committed so the app works without network/scraping at runtime.
 
 ## Error handling
 
@@ -125,3 +126,5 @@ question (German)
 ## Learning protocol
 
 Shahin writes the `Article` class and the search loop himself (weekend repetition exercise, Claude guides only). Claude builds dataset script, Flask wiring, UI, and evals scaffold — each explained in simple German during the build.
+
+Eval questions (`questions.json`): Claude drafts the ~30 questions with expected articles; **Shahin reviews and signs off on every question** — he must be able to defend the eval set in an interview, since eval quality is the repo's #1 hiring signal.
