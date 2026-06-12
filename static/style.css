@@ -1,0 +1,126 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #f4f5f7;
+  color: #1a1d21;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.chat {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+
+header h1 {
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+}
+
+header p {
+  color: #5b6470;
+  margin-top: 4px;
+  font-size: 0.95rem;
+}
+
+#messages {
+  flex: 1;
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.msg {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: #1a1d21;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.msg.bot {
+  align-self: flex-start;
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-bottom-left-radius: 4px;
+}
+
+.msg.error {
+  background: #fdecec;
+  border-color: #f5c2c2;
+  color: #8c2f2f;
+}
+
+.msg.pending {
+  color: #5b6470;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.45; }
+}
+
+.sources {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #eceff2;
+  font-size: 0.8rem;
+  color: #5b6470;
+}
+
+#ask-form {
+  display: flex;
+  gap: 8px;
+}
+
+#question {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #d4d9df;
+  border-radius: 10px;
+  font: inherit;
+  background: #fff;
+}
+
+#question:focus {
+  outline: 2px solid #1a1d21;
+  border-color: transparent;
+}
+
+button {
+  padding: 12px 22px;
+  border: 0;
+  border-radius: 10px;
+  background: #1a1d21;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #33383f;
+}
+
+footer {
+  margin-top: 16px;
+  text-align: center;
+  color: #8a93a0;
+}
