@@ -39,4 +39,6 @@ def ask_claude(question, articles, client=None):
             ),
         }],
     )
+    if not message.content:
+        return "Keine Antwort erhalten, versuch's nochmal."
     return message.content[0].text

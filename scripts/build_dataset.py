@@ -46,8 +46,11 @@ def fetch_article(n):
 def main():
     articles = []
     for n in range(1, 100):
-        articles.append(fetch_article(n))
-        print(f"fetched article {n}")
+        try:
+            articles.append(fetch_article(n))
+            print(f"fetched article {n}")
+        except requests.RequestException as error:
+            print(f"SKIPPED article {n}: {error}")
         time.sleep(0.5)  # be polite
     OUT_PATH.parent.mkdir(exist_ok=True)
     OUT_PATH.write_text(json.dumps(articles, ensure_ascii=False, indent=2), encoding="utf-8")
